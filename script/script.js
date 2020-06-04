@@ -1,2 +1,2 @@
-alert('Hello');
-console.log(3);
+let money, income, addExpenses, deposit, mission, period;
+alert('Привет мир');
