@@ -1,88 +1,94 @@
 'use strict';
 
-let money = +prompt('Ваш месячный доход?', '100000'),
-	income = 'Фриланс, битмейкинг',
-	addExpenses = prompt(
-		'Перечислите возможные расходы, через запятую',
-		'Интернет, бензин, коммуналка, жена'
-	),
-	deposit = confirm('Есть ли у вас депозит в банке?'),
-	mission = 1000000, //Копим
-	period = 6; //Период
+let isNumber = function (n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+};
 
-let expenses1 = prompt('Введите обязательную статью расходов?', 'Интернет'),
-	amount1 = +prompt('Во сколько это обойдется?', '32000'),
-	expenses2 = prompt('Введите обязательную статью расходов?', 'Бензин'),
-	amount2 = +prompt('Во сколько это обойдется?', '24520');
+let money,
+    income = 'Фриланс, битмейкинг',
+    addExpenses = prompt(
+        'Перечислите возможные расходы, через запятую',
+        'Интернет, бензин, коммуналка, жена'
+    ),
+    deposit = confirm('Есть ли у вас депозит в банке?'),
+    mission = 1000000, //Копим
+    period = 6; //Период
 
-// Функция вывода типа данных
+// let expenses1 = prompt('Введите обязательную статью расходов?', 'Интернет'),
+//     amount1 = +prompt('Во сколько это обойдется?', '32000'),
+//     expenses2 = prompt('Введите обязательную статью расходов?', 'Бензин'),
+//     amount2 = +prompt('Во сколько это обойдется?', '24520'),
+let amounts = [];
+
+let start = function () {
+    do {
+        money = prompt('Ваш месячный доход?', '');
+    }
+    while (!isNumber(money));
+};
+start();
+
 const showTypeOf = function (data) {
-	return typeof data;
+    return typeof data;
 };
 
-// Функция суммы всех обязательных расходов за месяц
-const getExpensesMonth = function (a, b) {
-	return a + b;
+const getExpensesMonth = function () {
+    let sum = 0;
+    for (let i = 0; i < 2; i++) {
+
+        amounts[i] = prompt('Введите обязательную статью расходов?', '');
+        let checkPrompt = prompt('Во сколько это обойдется?', '24520');
+
+        while (!isNumber(checkPrompt)) {
+            checkPrompt = prompt('Во сколько это обойдется?', '24520');
+        }
+        sum += +checkPrompt;
+    }
+    return sum;
 };
 
-// Функция накопления за месяц (Доходы минус расходы)
+let expensesAmout = getExpensesMonth();
+
 const getAccumulatedMonth = function (a, b) {
-	return a - b;
+    return a - b;
 };
 
-// переменной accumulatedMonth присвом результат вызова функции getAccumulatedMonth
-let accumulatedMonth = getAccumulatedMonth(
-	money,
-	getExpensesMonth(amount1, amount2)
-);
+let accumulatedMonth = getAccumulatedMonth(money, expensesAmout);
 
 // Функция расчета срока достижения цели
 const getTargetMonth = function (a, b) {
-	return Math.ceil(a / b);
+    let splitNumber = Math.ceil(a / b);
+    if (splitNumber < 0) {
+        return `Цель не будет достигнута! Расходы превышают доходы!`;
+    } else {
+        return `Cрок достижения цели, в месяцах: ${splitNumber}`;
+    }
 };
 
-//  Бюджет на день
 let budgetDay = Math.floor(accumulatedMonth / 30);
 
 const getStatusIncome = function (a) {
-	if (a >= 0) {
-		if (a > 1200) {
-			return 'У вас высокий уровень дохода!';
-		} else if (a < 600) {
-			return 'К сожалению у вас уровень дохода ниже среднего';
-		} else {
-			return 'У вас средний уровень дохода';
-		}
-	} else if (a < 0) {
-		return 'Что-то пошло не так...';
-	}
+    if (a >= 0) {
+        if (a > 1200) {
+            return 'У вас высокий уровень дохода!';
+        } else if (a < 600) {
+            return 'К сожалению у вас уровень дохода ниже среднего';
+        } else {
+            return 'У вас средний уровень дохода';
+        }
+    } else if (a < 0) {
+        return 'Что-то пошло не так...';
+    }
 };
 
-// вызовы функции showTypeOf
 console.log(money, showTypeOf(money));
 console.log(income, showTypeOf(income));
 console.log(deposit, showTypeOf(deposit));
-
-// Расходы за месяц вызов getExpensesMonth
+console.log('Сумма всех обязательных расходов за месяц: ', expensesAmout);
 console.log(
-	'Сумма всех обязательных расходов за месяц: ',
-	getExpensesMonth(amount1, amount2)
+    'возможные расходы за месяц: ',
+    addExpenses.toLowerCase().split(', ')
 );
-
-// Вывод возможных расходов за месяц в виде массива в нижнем регистре (прошлые уроки)
-console.log(
-	'возможные расходы за месяц: ',
-	addExpenses.toLowerCase().split(', ')
-);
-
-// Cрок достижения цели в месяцах (результат вызова функции getTargetMonth)
-console.log(
-	'Cрок достижения цели, в месяцах: ',
-	getTargetMonth(mission, accumulatedMonth)
-);
-
-// Бюджет на день (budgetDay)
+console.log(getTargetMonth(mission, accumulatedMonth));
 console.log('Бюджет на день, в рублях: ', budgetDay);
-
-// вызов функции getStatusIncome
 console.log('Статус Вашего дохода: ', getStatusIncome(budgetDay));
