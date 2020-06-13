@@ -25,18 +25,27 @@ let appData = {
 	budgetMonth: 0,
 	expensesMonth: 0,
 	asking: function () {
-		let addExpenses = prompt(
-			'Перечислите возможные расходы, через запятую',
-			'Интернет, бензин, коммуналка, жена'
-		);
+		let addExpenses;
+		do {
+			addExpenses = prompt(
+				'Перечислите возможные расходы, через запятую',
+				'Интернет, бензин, коммуналка, жена'
+			);
+		} while (addExpenses === null);
+
 		appData.addExpenses = addExpenses.toLowerCase().split(', ');
 		appData.deposit = confirm('Есть ли у вас депозит в банке?');
+
 		let a, b;
 		for (let i = 0; i < 2; i++) {
-			a = prompt('Введите обязательную статью расходов?');
+			if (i === 1) {
+				alert('Следующие данные укажите отличные от предыдущих!');
+			}
+			do {
+				a = prompt('Введите обязательную статью расходов?');
+			} while (a === null);
 			b = +prompt('Во сколько это обойдется?', '24520');
-
-			while (!isNumber(b)) {
+			while (!isNumber(b) || b === 0) {
 				b = +prompt('Во сколько это обойдется?', '24520');
 			}
 			appData.expenses[a] = b;
