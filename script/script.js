@@ -38,9 +38,6 @@ let appData = {
 
 		let a, b;
 		for (let i = 0; i < 2; i++) {
-			if (i === 1) {
-				alert('Следующие данные укажите отличные от предыдущих!');
-			}
 			do {
 				a = prompt('Введите обязательную статью расходов?');
 			} while (a === null);
@@ -48,6 +45,12 @@ let appData = {
 			while (!isNumber(b) || b === 0) {
 				b = +prompt('Во сколько это обойдется?', '24520');
 			}
+			appData.expenses[a] = b;
+		}
+		while (Object.keys(appData.expenses).length === 1) {
+			alert('Укажите расходы, отличные от предыдущих!');
+			a = prompt('Введите обязательную статью расходов?');
+			b = +prompt('Во сколько это обойдется?', '24520');
 			appData.expenses[a] = b;
 		}
 	},
