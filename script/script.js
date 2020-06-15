@@ -7,7 +7,7 @@ let isNumber = function (n) {
 let money,
 	start = function () {
 		do {
-			money = prompt('Ваш месячный доход?', '');
+			money = prompt('Ваш месячный доход?', '100000');
 		} while (!isNumber(money));
 	};
 start();
@@ -18,6 +18,8 @@ let appData = {
 	expenses: {},
 	addExpenses: [],
 	deposit: false,
+	percentDeposit: 0,
+	moneyDeposit: 0,
 	mission: 1000000, //Копим
 	period: 6,
 	budget: money,
@@ -25,33 +27,60 @@ let appData = {
 	budgetMonth: 0,
 	expensesMonth: 0,
 	asking: function () {
+		if (confirm('Есть ли у Вас дополнительый источник зароботка?')) {
+			let itemIncome, cashIncome;
+			do {
+				itemIncome = prompt(
+					'Какой у Вас дополнительный зароботок?',
+					'Продаю беляши'
+				);
+			} while (
+				itemIncome === null ||
+				isNumber(itemIncome) ||
+				itemIncome.trim() === ''
+			);
+			do {
+				cashIncome = prompt(
+					'Сколько Вы на этом зарабатываете?',
+					'10000'
+				);
+			} while (!isNumber(cashIncome) || cashIncome === 0);
+		}
+
 		let addExpenses;
 		do {
 			addExpenses = prompt(
 				'Перечислите возможные расходы, через запятую',
 				'Интернет, бензин, коммуналка, жена'
 			);
-		} while (addExpenses === null);
+		} while (
+			addExpenses === null ||
+			isNumber(addExpenses) ||
+			addExpenses.trim() === ''
+		);
 
 		appData.addExpenses = addExpenses.toLowerCase().split(', ');
 		appData.deposit = confirm('Есть ли у вас депозит в банке?');
 
-		let a, b;
-		for (let i = 0; i < 2; i++) {
+		const formationOfExpenses = function () {
+			let a, b;
 			do {
-				a = prompt('Введите обязательную статью расходов?');
-			} while (a === null);
-			b = +prompt('Во сколько это обойдется?', '24520');
-			while (!isNumber(b) || b === 0) {
+				a = prompt('Введите обязательную статью расходов?', 'квартира');
+			} while (a === null || isNumber(a) || a.trim() === '');
+
+			do {
 				b = +prompt('Во сколько это обойдется?', '24520');
-			}
+			} while (!isNumber(b) || b === 0);
+
 			appData.expenses[a] = b;
+		};
+
+		for (let i = 0; i < 2; i++) {
+			formationOfExpenses();
 		}
 		while (Object.keys(appData.expenses).length === 1) {
 			alert('Укажите расходы, отличные от предыдущих!');
-			a = prompt('Введите обязательную статью расходов?');
-			b = +prompt('Во сколько это обойдется?', '24520');
-			appData.expenses[a] = b;
+			formationOfExpenses();
 		}
 	},
 	getExpensesMonth: function () {
@@ -90,6 +119,28 @@ let appData = {
 			return 'Что-то пошло не так...';
 		}
 	},
+	getInfoDeposit: function () {
+		if (appData.deposit) {
+			do {
+				appData.percentDeposit = prompt('Какой процент?', '10');
+			} while (
+				!isNumber(appData.percentDeposit) ||
+				appData.percentDeposit === 0
+			);
+			do {
+				appData.moneyDeposit = prompt(
+					'Какая сумма заложена?',
+					'100000'
+				);
+			} while (
+				!isNumber(appData.moneyDeposit) ||
+				appData.moneyDeposit === 0
+			);
+		}
+	},
+	calcSavedMoney: function () {
+		return appData.budgetMonth * appData.period;
+	},
 };
 appData.asking();
 appData.getExpensesMonth();
@@ -111,3 +162,9 @@ let wwww = function () {
 	}
 };
 wwww();
+// appData.getInfoDeposit();
+// console.log(
+// 	appData.percentDeposit,
+// 	appData.moneyDeposit,
+// 	appData.calcSavedMoney()
+// );
