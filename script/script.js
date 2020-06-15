@@ -51,7 +51,7 @@ let appData = {
 		do {
 			addExpenses = prompt(
 				'Перечислите возможные расходы, через запятую',
-				'интернет, бензин, коммуналка, жена'
+				'интернет,бензин, жена, кафе'
 			);
 		} while (
 			addExpenses === null ||
@@ -161,11 +161,26 @@ let wwww = function () {
 wwww();
 
 // ДЗ из урока №8
-let arrayString = '';
-for (let i = 0; i < appData.addExpenses.length; i++) {
-	arrayString = appData.addExpenses[i];
-	appData.addExpenses[i] =
-		arrayString[0].toUpperCase() + arrayString.slice(1);
-}
-arrayString = appData.addExpenses.join(', ');
-console.log('arrayString: ', arrayString);
+const stringOutputAddExpenses = function () {
+	let arrayString, arrayLetter;
+
+	for (let i = 0; i < appData.addExpenses.length; i++) {
+		arrayString = appData.addExpenses[i];
+
+		// Учтем, что юзер может не ставить пробел после запятой
+		arrayLetter = arrayString.split('');
+		for (let index = 0; index < arrayString.length; index++) {
+			if (arrayLetter[index] === ',') {
+				arrayLetter[index] = arrayLetter[index] + ' ';
+				arrayLetter[index + 1] = arrayLetter[index + 1].toUpperCase();
+			}
+		}
+		arrayString = arrayLetter.join('');
+
+		appData.addExpenses[i] =
+			arrayString[0].toUpperCase() + arrayString.slice(1);
+	}
+	appData.addExpenses = appData.addExpenses.join(', ');
+	console.log('arrayString: ', appData.addExpenses);
+};
+stringOutputAddExpenses();
