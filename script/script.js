@@ -51,7 +51,7 @@ let appData = {
 		do {
 			addExpenses = prompt(
 				'Перечислите возможные расходы, через запятую',
-				'Интернет, бензин, коммуналка, жена'
+				'интернет, бензин, коммуналка, жена'
 			);
 		} while (
 			addExpenses === null ||
@@ -67,11 +67,9 @@ let appData = {
 			do {
 				a = prompt('Введите обязательную статью расходов?', 'квартира');
 			} while (a === null || isNumber(a) || a.trim() === '');
-
 			do {
 				b = +prompt('Во сколько это обойдется?', '24520');
 			} while (!isNumber(b) || b === 0);
-
 			appData.expenses[a] = b;
 		};
 
@@ -85,7 +83,6 @@ let appData = {
 	},
 	getExpensesMonth: function () {
 		let sum = 0;
-
 		for (let key in appData.expenses) {
 			sum += appData.expenses[key];
 		}
@@ -162,9 +159,13 @@ let wwww = function () {
 	}
 };
 wwww();
-// appData.getInfoDeposit();
-// console.log(
-// 	appData.percentDeposit,
-// 	appData.moneyDeposit,
-// 	appData.calcSavedMoney()
-// );
+
+// ДЗ из урока №8
+let arrayString = '';
+for (let i = 0; i < appData.addExpenses.length; i++) {
+	arrayString = appData.addExpenses[i];
+	appData.addExpenses[i] =
+		arrayString[0].toUpperCase() + arrayString.slice(1);
+}
+arrayString = appData.addExpenses.join(', ');
+console.log('arrayString: ', arrayString);
