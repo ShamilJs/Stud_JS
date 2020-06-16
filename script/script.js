@@ -144,10 +144,13 @@ appData.getExpensesMonth();
 appData.getBudget();
 appData.getTargetMonth();
 appData.getStatusIncome();
+appData.getInfoDeposit();
 
 console.log('Сумма расходов за месяц: ', appData.getExpensesMonth());
 console.log(appData.getTargetMonth());
 console.log('Статус Вашего дохода: ', appData.getStatusIncome());
+
+stringOutputAddExpenses();
 
 let wwww = function () {
 	for (let key in appData) {
@@ -161,7 +164,7 @@ let wwww = function () {
 wwww();
 
 // ДЗ из урока №8
-const stringOutputAddExpenses = function () {
+function stringOutputAddExpenses() {
 	let arrayString, arrayLetter;
 
 	for (let i = 0; i < appData.addExpenses.length; i++) {
@@ -181,6 +184,9 @@ const stringOutputAddExpenses = function () {
 			arrayString[0].toUpperCase() + arrayString.slice(1);
 	}
 	appData.addExpenses = appData.addExpenses.join(', ');
-	console.log('arrayString: ', appData.addExpenses);
-};
-stringOutputAddExpenses();
+	console.log(
+		'appData.addExpenses в строку с большой буквы: ',
+		appData.addExpenses
+	);
+	appData.addExpenses = appData.addExpenses.split(',');
+}
