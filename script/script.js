@@ -55,6 +55,7 @@ let appData = {
 	budgetMonth: 0,
 	expensesMonth: 0,
 
+
 	start: function () {
 		this.budget = +salaryAmount.value;
 		this.getExpenses();
