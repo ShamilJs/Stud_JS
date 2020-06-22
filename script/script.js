@@ -32,7 +32,7 @@ let start = document.getElementById('start'), //Кнопка "РАСЧИТАТЬ
 	additionalExpensesItem = document.querySelector(
 		'.additional_expenses-item'
 	),
-	targetAmount = document.querySelector('.target-amount'),
+		targetAmount = document.querySelector('.target-amount'),
 	periodAmount = document.querySelector('.period-amount'),
 	periodSelect = document.querySelector('.period-select'),
 	naming = document.querySelectorAll('[placeholder="Наименование"]'),
