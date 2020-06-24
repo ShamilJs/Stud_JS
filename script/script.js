@@ -50,11 +50,8 @@ class AppData {
 	
 	start () {
 		this.budget = +salaryAmount.value;
-		this.getExpenses();
-		this.getIncome();
-		this.getExpensesMonth();
-		this.getAddExpenses();
-		this.getAddIncome();
+		this.getExpInc()
+		this.getAddExpInc()
 		this.getBudget();
 		this.showResult();
 		
@@ -125,53 +122,39 @@ class AppData {
 		});
 	};
 
-	addExpensesBlock() {
-		const newElem = expensesItems[0].cloneNode(true);
+	addExpInc(arg, plusName) {
+		const newElem = arg[0].cloneNode(true);
 		const newElem1 = newElem.children;
 		for (let i = 0; i < newElem1.length; i++) {
 			newElem1[i].value = '';
 		}
-		expensesItems[0].parentNode.insertBefore(newElem, plusExpensesAdd);
-		expensesItems = document.querySelectorAll('.expenses-items');
-		if (expensesItems.length === 3) {
-			plusExpensesAdd.style.display = 'none';
+		arg[0].parentNode.insertBefore(newElem, plusName);
+		let startStr = arg[0].className.split('-')[0];
+		if (arg === incomeItem) {
+			incomeItem = document.querySelectorAll(`.${startStr}-items`);
+		} else if (arg === expensesItems) {
+			expensesItems = document.querySelectorAll(`.${startStr}-items`);
+		}
+		if (arg.length === 3) {
+			plusName.style.display = 'none';
 		}
 	};
 
-	addIncomeBlock() {
-		const newElem = incomeItem[0].cloneNode(true);
-		const newElem1 = newElem.children;
-		for (let i = 0; i < newElem1.length; i++) {
-			newElem1[i].value = '';
-		}
-		incomeItem[0].parentNode.insertBefore(newElem, plusIncomeAdd);
-		incomeItem = document.querySelectorAll('.income-items');
-		if (incomeItem.length === 3) {
-			plusIncomeAdd.style.display = 'none';
-		}
-	};
-
-	getExpenses() {
-		expensesItems.forEach((item) => {
-			let itemExpenses = item.querySelector('.expenses-title').value;
-			let cashExpenses = item.querySelector('.expenses-amount').value;
-			if (itemExpenses !== '' && cashExpenses !== '') {
-				this.expenses[itemExpenses] = +cashExpenses;
+	getExpInc() {
+		const count = (item) => {
+			const startStr = item.className.split('-')[0];
+			const itemTitle = item.querySelector(`.${startStr}-title`).value;
+			const itemAmount = item.querySelector(`.${startStr}-amount`).value;
+			if (itemTitle !== '' && itemAmount !== '') {
+				this[startStr][itemTitle] = +itemAmount;
 			}
-		});
+		};
+		incomeItem.forEach(count);
+		expensesItems.forEach(count);
 	};
 
-	getIncome() {
-		incomeItem.forEach((item) => {
-			let itemIncome = item.querySelector('.income-title').value;
-			let cashIncome = item.querySelector('.income-amount').value;
-			if (itemIncome !== '' && cashIncome !== '') {
-				this.income[itemIncome] = +cashIncome;
-			}
-		});
-	};
-
-	getAddExpenses() {
+	getAddExpInc() {
+		this.addIncome = [];
 		this.addExpenses = [];
 		let addExpenses = additionalExpensesItem.value.split(',');
 		addExpenses.forEach((item) => {
@@ -180,10 +163,6 @@ class AppData {
 				this.addExpenses.push(item);
 			}
 		});
-	};
-
-	getAddIncome() {
-		this.addIncome = [];
 		additionalIncomeItem.forEach((item) => {
 			let itemValue = item.value.trim();
 			if (itemValue !== '') {
@@ -192,26 +171,20 @@ class AppData {
 		});
 	};
 
-	getExpensesMonth() {
+	getExpIncMonth(arg) {
 		let sum = 0;
-		for (let key in this.expenses) {
-			sum += +this.expenses[key];
+		for (let key in arg) {
+			sum += +arg[key];
 		}
-		this.expensesMonth = sum;
-		return sum;
-	};
-
-	getIncomeMonth() {
-		let sum = 0;
-		for (let key in this.income) {
-			sum += +this.income[key];
+		if (arg === this.expenses) {
+			this.expensesMonth = sum;
 		}
 		return sum;
 	};
 
 	getBudget() {
-		this.budgetMonth = this.budget + this.getIncomeMonth() -
-			this.getExpensesMonth();
+		this.budgetMonth = this.budget + this.getExpIncMonth(this.income) -
+			this.getExpIncMonth(this.expenses);
 		this.budgetDay = Math.floor(this.budgetMonth / 30);
 		return this.budgetMonth;
 	};
@@ -237,10 +210,10 @@ class AppData {
 			this.reset();
 		});
 		plusExpensesAdd.addEventListener('click', () => {
-			this.addExpensesBlock();
+			this.addExpInc(expensesItems, plusExpensesAdd);
 		});
 		plusIncomeAdd.addEventListener('click', () => {
-			this.addIncomeBlock();
+			this.addExpInc(incomeItem, plusIncomeAdd);
 		});
 		periodSelect.addEventListener('input', () => {
 			this.getPeriod();
